@@ -2,6 +2,10 @@ plugins {
     id 'com.android.application'
 }
 
+
+ext.nameSuffix = 'SerialPort'
+
+
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.2"
@@ -11,11 +15,23 @@ android {
         minSdkVersion 21
         targetSdkVersion 30
         versionCode 1
-        versionName "1.0"
+        versionName nameSuffix + '_'+ 'V' + versionCode
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    //打包的配置
+    android.applicationVariants.all { variant ->
+        variant.outputs.all {
+            if (variant.buildType.name.equals("release")) {
+                outputFileName = "${variant.versionName}_Release.apk"
+            }
+            if (variant.buildType.name.equals("debug")) {
+                outputFileName = "${variant.versionName}_Debug.apk"
+            }
+        }
+    }
+    
     buildTypes {
         release {
             minifyEnabled false
